@@ -141,17 +141,19 @@ queue<string> Interpreter::alg(string stringInfix)
     string numOrVar = "";
 
     try {
-
+        
         for (unsigned int i = 0; i < stringInfix.length(); i++) {
+            //if the '-' is first
             if (i == 0 && stringInfix[0] == '-') {
                 quene.push("0");
                 stack.push('-');
                 continue;
             }
+            //if the '+' is first
             if (i == 0 && stringInfix[0] == '+') {
                 continue;
             }
-
+            //can't be with ' '
             if (stringInfix[i] == ' ') {
                 throw "bad input";
             }
@@ -163,6 +165,7 @@ queue<string> Interpreter::alg(string stringInfix)
             }
             if (isOperator(stringInfix[i])) {
                 if (!stack.empty()) {
+                    //by the alguritem (the Priorities of the operator)
                     while (((stringInfix[i] == '+' || stringInfix[i] == '-') && (stack.top() == '*' || stack.top() == '/'))
                            || (stringInfix[i] == '-' && stack.top() == '+')
                            || (stringInfix[i] == '+' && stack.top() == '-')) {
@@ -199,9 +202,8 @@ queue<string> Interpreter::alg(string stringInfix)
                 stack.push(stringInfix[i]);
 
             }
-
+            //close the phare
             else if (stringInfix[i] == ')') {
-
                 while (stack.size() != 0 && stack.top() != '(') {
                     quene.push(getString(stack.top()));
                     stack.pop();
@@ -214,6 +216,7 @@ queue<string> Interpreter::alg(string stringInfix)
                     stack.pop();
                 }
             }
+            //this is the continue of the name
             else {
                 numOrVar = numOrVar + stringInfix[i];
                 //the number stay in the end
@@ -224,6 +227,7 @@ queue<string> Interpreter::alg(string stringInfix)
 
             }
         }
+        //put what left in the quene
         while (stack.size() != 0) {
             quene.push(getString(stack.top()));
             stack.pop();
@@ -329,6 +333,7 @@ void Interpreter::setVariables(string variables) {
             throw "bad input";
         }
 
+        //how the var need to be (legal)
         regex b("^([a-z]|[A-Z]|[_])+([a-z]|[A-Z]|[_]|[0-9])*$");
         if (!regex_match(varApartNum[1], b)) {
             throw "bad input";
